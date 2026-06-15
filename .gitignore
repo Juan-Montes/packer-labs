@@ -6,6 +6,7 @@
 secrets/
 credentials/
 gcp-credentials.json
+gcp.pkrvars.hcl
 
 # ─── Archivos generados por Packer ───────────────────────────────────────────
 packer_cache/
