@@ -5,6 +5,7 @@
 .env.*
 secrets/
 credentials/
+gcp-credentials.json
 
 # ─── Archivos generados por Packer ───────────────────────────────────────────
 packer_cache/
