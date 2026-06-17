@@ -1,0 +1,9 @@
+# Copia como azure.pkrvars.hcl y rellena con tus credenciales
+# NUNCA subas azure.pkrvars.hcl al repositorio
+
+client_id       = "TU_CLIENT_ID"
+client_secret   = "TU_CLIENT_SECRET"
+subscription_id = "TU_SUBSCRIPTION_ID"
+tenant_id       = "TU_TENANT_ID"
+resource_group  = "rg-packer-devops"
+location        = "West US"
