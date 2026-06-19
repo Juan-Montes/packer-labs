@@ -53,6 +53,9 @@ SyslogFacility AUTH
 Banner /etc/issue.net
 SSH
 
+# Corregir permisos de sshd_config
+chmod 600 /etc/ssh/sshd_config
+
 # --- 5.2 Banner de advertencia legal ---
 cat > /etc/issue.net << BANNER
 *******************************************************************************

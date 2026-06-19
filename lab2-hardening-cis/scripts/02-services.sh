@@ -50,7 +50,11 @@ done
 
 # --- 2.3 Instalar y habilitar servicios de seguridad requeridos ---
 apt-get update -y || true
-apt-get install -y \
+# Preconfigurar postfix para instalación no interactiva (dependencia de aide)
+echo "postfix postfix/mailname string localhost" | debconf-set-selections
+echo "postfix postfix/main_mailer_type string 'Local only'" | debconf-set-selections
+
+DEBIAN_FRONTEND=noninteractive apt-get install -y \
   ufw \
   aide \
   libpam-pwquality \

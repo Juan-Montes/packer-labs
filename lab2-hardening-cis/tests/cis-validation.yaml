@@ -1,9 +1,7 @@
 # =============================================================================
 # Goss test suite — CIS Ubuntu 22.04 LTS Level 1
-# Valida que el hardening se aplicó correctamente antes de publicar la imagen
 # =============================================================================
 
-# ── Paquetes requeridos instalados ───────────────────────────────────────────
 package:
   fail2ban:
     installed: true
@@ -17,8 +15,6 @@ package:
     installed: true
   aide:
     installed: true
-
-# Paquetes peligrosos eliminados
   telnet:
     installed: false
   rsh-client:
@@ -26,7 +22,6 @@ package:
   nis:
     installed: false
 
-# ── Servicios habilitados ────────────────────────────────────────────────────
 service:
   auditd:
     enabled: true
@@ -36,8 +31,6 @@ service:
     enabled: true
   unattended-upgrades:
     enabled: true
-
-# Servicios peligrosos deshabilitados
   bluetooth:
     enabled: false
   cups:
@@ -45,8 +38,15 @@ service:
   avahi-daemon:
     enabled: false
 
-# ── Configuración SSH ────────────────────────────────────────────────────────
 file:
+  /etc/sudoers.d/99-cis:
+    exists: true
+    mode: "0440"
+    owner: root
+    group: root
+    contains:
+      - "use_pty"
+      - "logfile"
   /etc/ssh/sshd_config:
     exists: true
     mode: "0600"
@@ -59,8 +59,33 @@ file:
       - "X11Forwarding no"
       - "LoginGraceTime 60"
       - "ClientAliveInterval 300"
+  /etc/passwd:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+  /etc/shadow:
+    exists: true
+    mode: "0640"
+    owner: root
+  /etc/group:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+  /etc/modprobe.d/cis-filesystem.conf:
+    exists: true
+    contains:
+      - "install cramfs /bin/true"
+      - "install hfs /bin/true"
+      - "install udf /bin/true"
+  /etc/security/pwquality.conf:
+    exists: true
+    contains:
+      - "minlen = 14"
+      - "dcredit = -1"
+      - "ucredit = -1"
 
-# ── Parámetros del kernel ────────────────────────────────────────────────────
 kernel-param:
   net.ipv4.tcp_syncookies:
     value: "1"
@@ -84,46 +109,3 @@ kernel-param:
     value: "1"
   fs.protected_hardlinks:
     value: "1"
-
-# ── Permisos de archivos críticos ────────────────────────────────────────────
-  /etc/passwd:
-    exists: true
-    mode: "0644"
-    owner: root
-    group: root
-
-  /etc/shadow:
-    exists: true
-    mode: "0640"
-    owner: root
-
-  /etc/group:
-    exists: true
-    mode: "0644"
-    owner: root
-    group: root
-
-  /etc/sudoers.d/99-cis:
-    exists: true
-    mode: "0440"
-    owner: root
-    group: root
-    contains:
-      - "use_pty"
-      - "logfile"
-
-# ── Módulos peligrosos deshabilitados ────────────────────────────────────────
-  /etc/modprobe.d/cis-filesystem.conf:
-    exists: true
-    contains:
-      - "install cramfs /bin/true"
-      - "install hfs /bin/true"
-      - "install udf /bin/true"
-
-# ── Política de contraseñas ──────────────────────────────────────────────────
-  /etc/security/pwquality.conf:
-    exists: true
-    contains:
-      - "minlen = 14"
-      - "dcredit = -1"
-      - "ucredit = -1"

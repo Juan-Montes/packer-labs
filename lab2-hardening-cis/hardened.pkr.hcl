@@ -82,10 +82,19 @@ build {
   name    = "cis-hardened"
   sources = ["source.azure-arm.hardened"]
 
-  # Subir scripts de hardening
+  # Crear directorios destino y subir scripts
+  provisioner "shell" {
+    inline = [
+      "mkdir -p /tmp/cis-scripts",
+      "sudo apt-get clean",
+      "sudo rm -rf /var/lib/apt/lists/*",
+      "sudo apt-get update -y && sudo apt-get install -y curl",
+    ]
+  }
+
   provisioner "file" {
     source      = "scripts/"
-    destination = "/tmp/cis-scripts/"
+    destination = "/tmp/cis-scripts"
   }
 
   provisioner "file" {
@@ -94,12 +103,7 @@ build {
   }
 
   provisioner "shell" {
-    inline = [
-      "sudo apt-get clean",
-      "sudo rm -rf /var/lib/apt/lists/*",
-      "sudo apt-get update -y && sudo apt-get install -y curl",
-      "chmod +x /tmp/cis-scripts/*.sh",
-    ]
+    inline = ["chmod +x /tmp/cis-scripts/*.sh"]
   }
 
   # Aplicar cada sección CIS
